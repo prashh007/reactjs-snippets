@@ -1,39 +1,62 @@
 import React, { Component } from "react";
+import Counter from "../widgets/counter";
 
 class Counters extends Component {
   state = {
-    counter: 0
+    counters: [
+      { id: 1, value: 0 },
+      { id: 2, value: 2 },
+      { id: 3, value: 23 },
+      { id: 4, value: 10 }
+    ]
   };
-  handleIncrement = () => {
-    this.setState({ counter: this.state.counter + 1 });
+  handleIncrement = counter => {
+    let counters = [...this.state.counters];
+    let index = counters.indexOf(counter);
+    counters[index] = { ...counter };
+    counters[index].value++;
+    this.setState({ counters });
   };
-  handleDecrement = () => {
-    this.setState({ counter: this.state.counter - 1 });
-  };  
+  handleDecrement = counter => {
+    let counters = [...this.state.counters];
+    let index = counters.indexOf(counter);
+    counters[index] = { ...counter };
+    counters[index].value--;
+    this.setState({ counters });
+  };
+  handleReset = () => {
+    const counters = [...this.state.counters];
+    counters.map(c => (c.value = 0));
+    this.setState({ counters });
+  };
+  handleDelete = counter => {
+    let counters = [...this.state.counters];
+    counters = counters.filter(c => {
+      if (c.id !== counter.id) return c;
+    });
+    this.setState({ counters });
+  };
   render() {
-    const { counter } = this.state;
-    let classes = 'badge badge-';
-    if(counter === 0){
-        classes +='warning';
-    } else {classes +='primary'};
+    const { counters } = this.state;
 
     return (
-      <div>
-        <span className={classes}>{counter===0 ? 'Zero' : counter}</span>
-        <button
-          className="btn btn-secondary btn-sm m-2"
-          onClick={this.handleIncrement}
-        >
-          <i className="fa fa-plus" aria-hidden="true" />
-        </button>
-        <button
-          className="btn btn-secondary btn-sm m-2"
-          onClick={this.handleDecrement}
-          disabled = {counter <= 0 ? true : null}
-        >
-          <i className="fa fa-minus" aria-hidden="true" />
-        </button>        
-      </div>
+      <main className="container">
+        {counters.length !== 0 ? (
+          <button className="btn btn-primary btn-sm" onClick={this.handleReset}>
+            Reset
+          </button>
+        ) : null}
+        
+        {counters.map(counter => (
+          <Counter
+            key={counter.id}
+            counter={counter}
+            onIncrement={this.handleIncrement}
+            onDecrement={this.handleDecrement}
+            onDelete={this.handleDelete}
+          />
+        ))}
+      </main>
     );
   }
 }
