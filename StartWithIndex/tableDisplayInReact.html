@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Table Display in React</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        margin: 10px auto;
+      }
+    </style>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      // Reactjs code goes Here --~>
+
+      class App extends React.Component {
+        //preDefined variables
+        state = {
+          characters: [
+            { id: 1, name: "pranav", location: "Hyderabad" },
+            { id: 2, name: "john morphy", location: "Delhi" },
+            { id: 3, name: "Satish", location: "Bengalore" },
+            { id: 4, name: "Manish", location: "Kochi" }
+          ]
+        };
+
+        // Event Handlers
+        handleDelete = char => {
+          let characters = [...this.state.characters];
+          characters = characters.filter(c => c.id !== char.id);
+          this.setState({ characters });
+        };
+
+        // DOM rendering
+        render() {
+          const { characters } = this.state;
+          return (
+            <div className="container">
+              <div className="row">
+                <div className="col">
+                  {characters.length !== 0 ? (
+                    <Table
+                      characters={characters}
+                      onDelete={this.handleDelete}
+                    />
+                  ) : (
+                    <h4><span style={{color:"red"}}>Removed all</span>, Refresh to load it back.</h4>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      //   stateless/functional/Reusable components
+
+      const Table = ({ characters, onDelete }) => {
+        return (
+          <table className="table table-dark">
+            <Thead />
+            <Tbody characters={characters} onDelete={onDelete} />
+          </table>
+        );
+      };
+
+      const Thead = () => {
+        return (
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th> Location </th>
+              <th> Action </th>
+            </tr>
+          </thead>
+        );
+      };
+
+      const Tbody = ({ characters, onDelete }) => {
+        return (
+          <tbody>
+            {characters.map(character => (
+              <tr key={character.id}>
+                <td>
+                  {character.name.charAt(0).toUpperCase() +
+                    character.name.slice(1)}
+                </td>
+                <td>{character.location}</td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => onDelete(character)}
+                  >
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        );
+      };
+
+      ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
