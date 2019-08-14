@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Rendering in React</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const rootElement = document.getElementById("root");
+
+      //**********************Rendering on setInterval ********************************//
+
+      //   let timer = () => {
+      //     const ele = (
+      //       <h1>
+      //         The timer renders on every seconds <br/> {new Date().toLocaleTimeString() }
+      //       </h1>
+      //     );
+      //     ReactDOM.render(ele, rootElement)
+      //   };
+      //   setInterval(timer, 1000);
+
+      //****************** composing component  on setInterval ************************//
+
+      //   function Clock(props) { // functional components
+      //     return (
+      //       <h1 style={{ textAlign: "center" }}>
+      //         {props.date.toLocaleTimeString()}
+      //       </h1>
+      //     );
+      //   }
+      //   const timer = () => {
+      //     ReactDOM.render(<Clock date={new Date()} />, rootElement);
+      //   };
+      //   setInterval(timer, 1000);
+
+      //****************** State and LifeCycle ************************//
+      class Clock extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            date: new Date()
+          };
+        }
+        //LifeCycles
+        componentDidMount = () => {
+          this.timeId = setInterval(this.tick, 1000);
+        };
+        componentWillUnmount = () => {
+          clearInterval(this.timeId);
+        };
+        tick = () => {
+          this.setState({ date: new Date() });
+        };
+        render() {
+          let { date } = this.state;
+          return (
+            <div>
+              <h1 style={{ textAlign: "center" }}>
+                The Time is :{date.toLocaleTimeString()}
+              </h1>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<Clock />, rootElement);
+    </script>
+  </body>
+</html>
