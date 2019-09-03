@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>React Forms</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      class FormData extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            formData: null
+          };
+        }
+        handleFormData = formData => {
+          this.setState({
+            formData
+          });
+        };
+        render() {
+          return (
+            <div className="container">
+              <div className="row  align-items-center">
+                <div className="col-md-8 offset-md-2">
+                  <FormTemp handleFormData={this.handleFormData} />
+                  {console.log("formDataReceived ", this.state.formData)}
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+      class FormTemp extends React.Component {
+        state = {
+          name: "",
+          emailId: "",
+          blogText: "",
+          isAgree: false
+        };
+        handleChange = e => {
+          let name = e.target.name;
+          let value =
+            e.target.type === "checkbox" ? e.target.checked : e.target.value;
+          this.setState({
+            [name]: value
+          });
+        };
+        handleSubmit = e => {
+          e.preventDefault();
+          this.props.handleFormData(this.state);         
+          this.setState({
+            name: "",
+            emailId: "",
+            blogText: "",
+            isAgree: false
+          });
+          alert("Thank you for the feedBack..");
+        };
+        render() {
+          return (
+            <form
+              onSubmit={this.handleSubmit}
+              style={{
+                margin: 10,
+                border: "1px solid",
+                padding: 20,
+                borderRadius: 5
+              }}
+            >
+              <label className="form-group col-md-12">
+                Name :
+                <input
+                  type="text"
+                  className="form-control"
+                  name="name"
+                  value={this.state.name}
+                  placeholder="Enter email"
+                  onChange={this.handleChange}
+                />
+              </label>
+
+              <label className="form-group col-md-12">
+                Email :
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="emailId"
+                  name="emailId"
+                  value={this.state.emailId}
+                  required
+                  onChange={this.handleChange}
+                />
+              </label>
+              <small id="emailHelp" className="form-text text-muted">
+                We'll never share your email with anyone else.
+              </small>
+
+              <label className="form-group col-md-12">
+                About you :
+                <textarea
+                  className="form-control"
+                  placeholder="write about you"
+                  name="blogText"
+                  value={this.state.blogText}
+                  onChange={this.handleChange}
+                ></textarea>
+              </label>
+
+              <label className="form-check-label col-md-12">
+                <input
+                  type="checkbox"
+                  name="isAgree"
+                  className="form-check-input"
+                  checked={this.state.isAgree}
+                  onChange={this.handleChange}
+                />
+                I, Agree
+              </label>
+
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={!this.state.isAgree ? true : false}
+              >
+                Submit
+              </button>
+            </form>
+          );
+        }
+      }
+      ReactDOM.render(<FormData />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
