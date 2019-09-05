@@ -29,14 +29,14 @@
           this.setState({
             formData
           });
+          console.log(formData);
         };
         render() {
           return (
             <div className="container">
               <div className="row  align-items-center">
                 <div className="col-md-8 offset-md-2">
-                  <FormTemp handleFormData={this.handleFormData} />
-                  {console.log("formDataReceived ", this.state.formData)}
+                  <FormTemp handleFormData={this.handleFormData} />                  
                 </div>
               </div>
             </div>
@@ -133,10 +133,16 @@
               <button
                 type="submit"
                 className="btn btn-primary"
+                style={{marginTop:20}}
                 disabled={!this.state.isAgree ? true : false}
               >
                 Submit
               </button>
+              <div style={{marginTop:20}}>
+                    <p>Name: {this.state.name}</p>
+                    <p>Email-Id : {this.state.emailId}</p>
+                    <p> About u : {this.state.blogText}</p>                    
+               </div>
             </form>
           );
         }
